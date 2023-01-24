@@ -10,7 +10,8 @@
     />
     <link rel="stylesheet" href="style.css" />
     <title>Excel</title>
-    <script src="./script.js" defer></script>
+    <script src="./grid.js" defer></script>
+    <script src="./cell-properties.js" defer></script>
   </head>
   <body>
     <div class="page-actions-cont">
@@ -20,15 +21,12 @@
       <div class="page-actions">Help</div>
     </div>
     <div class="cellprop-actions-cont">
-      <div class="cellprop-actions">
-        <span class="material-symbols-outlined"> content_copy </span>
-      </div>
-      <div class="cellprop-actions">
-        <span class="material-symbols-outlined"> cut </span>
-      </div>
-      <div class="cellprop-actions">
-        <span class="material-symbols-outlined"> content_paste </span>
-      </div>
+      <span class="material-symbols-outlined"> content_copy </span>
+
+      <span class="material-symbols-outlined"> cut </span>
+
+      <span class="material-symbols-outlined"> content_paste </span>
+
       <select class="font-family-prop">
         <option value="monospace">Monospace</option>
         <option value="sans-serif">Sans-Serif</option>
@@ -41,23 +39,29 @@
         <option value="18">18</option>
         <option value="20">20</option>
       </select>
-      <div class="cellprop-actions">
-        <span class="material-symbols-outlined"> format_bold </span>
+
+      <span class="material-symbols-outlined bold"> format_bold </span>
+
+      <span class="material-symbols-outlined italic"> format_italic </span>
+      <span class="material-symbols-outlined underline">
+        format_underlined
+      </span>
+      <span class="material-symbols-outlined left alignment">
+        format_align_left
+      </span>
+      <span class="material-symbols-outlined center alignment">
+        format_align_center
+      </span>
+      <span class="material-symbols-outlined right alignment">
+        format_align_right
+      </span>
+      <div class="color-group">
+        <span class="material-symbols-outlined"> format_color_text </span>
+        <input type="color" class="font-color-prop" />
       </div>
-      <div class="cellprop-actions">
-        <span class="material-symbols-outlined"> format_italic </span>
-      </div>
-      <div class="cellprop-actions">
-        <span class="material-symbols-outlined"> format_underlined </span>
-      </div>
-      <div class="cellprop-actions">
-        <span class="material-symbols-outlined"> format_align_left </span>
-      </div>
-      <div class="cellprop-actions">
-        <span class="material-symbols-outlined"> format_align_center </span>
-      </div>
-      <div class="cellprop-actions">
-        <span class="material-symbols-outlined"> format_align_right </span>
+      <div class="color-group">
+        <span class="material-symbols-outlined"> format_color_fill </span>
+        <input type="color" class="background-color-prop" />
       </div>
     </div>
     <div class="formula-actions-cont">

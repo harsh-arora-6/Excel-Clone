@@ -23,8 +23,12 @@ for(let i = 0;i < rows;i++){
     rowElem.setAttribute('class','row-cont');
     for(let j = 0;j < cols;j++){
         let colElem = document.createElement("div");
-        colElem.setAttribute('class','address-row');
+        colElem.setAttribute('class','cell');
         colElem.setAttribute('contenteditable',true);
+        colElem.setAttribute('spellcheck',false);
+        // Attributes for cell identification
+        colElem.setAttribute('rid',`${i}`);
+        colElem.setAttribute('cid',`${j}`);
         colElem.addEventListener('click',(e)=>{
             const rowNum = i + 1;
             const colNum = String.fromCharCode(65 + j);
@@ -34,3 +38,5 @@ for(let i = 0;i < rows;i++){
     }
     cellsCont.appendChild(rowElem);
 }
+let firstCell = document.querySelector('.cell');
+firstCell.click();
