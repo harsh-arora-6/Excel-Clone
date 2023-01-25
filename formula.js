@@ -10,7 +10,7 @@ for(let i = 0;i < rows;i++){
             // so after evaluation when we come back to a cell and then again move out then in blur event these two will become unequal hence formula will be reset.
             // console.log(typeof(cellProp.value),typeof(enteredData)); first one is number , second is string 
             if(cellProp.value == enteredData)return;
-            removeCellFromPreviousParents(cellProp.formula,currentCellAddr);
+            removeChildFromParents(cellProp.formula,currentCellAddr);
             storeValueAndFormula(enteredData,"",currentCellAddr);
             updateChildrenCells(currentCellAddr);
         })
@@ -25,9 +25,9 @@ formulaBar.addEventListener('keydown',(e)=>{
         if(inputFormula !== cellProp.formula){
             //remove from previous graph
             //If previous formula was there, then remove previous graph edges;
-            if(cellProp.formula !== "")removeFromGraph(cellProp.formula,addressBar.value);
+            if(cellProp.formula !== "")removeChildFromParents(cellProp.formula,addressBar.value);
             // add child to graph
-            addToGraph(inputFormula,addressBar.value);
+            addChildToParent(inputFormula,addressBar.value);
 
             //check for cycle
             let isCyclic = checkCycle();
@@ -35,45 +35,20 @@ formulaBar.addEventListener('keydown',(e)=>{
             // console.log(isCyclic);
             if(isCyclic){
                 alert('Your Formula is Cyclic')
-                removeFromGraph(inputFormula,addressBar.value);
+                removeChildFromParents(inputFormula,addressBar.value);
                 return;
             }
 
-            // remove from previous parents
-            removeCellFromPreviousParents(cellProp.formula,addressBar.value);
             //evaluate new formula
             let evaluatedValue = evaluate(inputFormula);
             //change the value and formula
             storeValueAndFormula(evaluatedValue,inputFormula,addressBar.value);
-            addChildToParent(inputFormula,addressBar.value);
             //change values for children
             updateChildrenCells(addressBar.value);
         }
         
     }
 })
-function removeFromGraph(formula,currentCellAddr){
-    let encodedFormula = formula.split(' ');
-    for(let i = 1;i < encodedFormula.length;i++){
-        if('A' <= encodedFormula[i][0] && encodedFormula[i][1] <= 'Z'){
-            let [rid,cid] = decode_RID_CID(encodedFormula[i]);
-            let [crid,ccid] = decode_RID_CID(currentCellAddr);
-            graph[rid][cid].pop();
-            indeg[crid][ccid]--;
-        }
-    }
-}
-function addToGraph(formula,currentCellAddr){
-    let encodedFormula = formula.split(' ');
-    for(let i = 1;i < encodedFormula.length;i++){
-        if('A' <= encodedFormula[i][0] && encodedFormula[i][1] <= 'Z'){
-            let [rid,cid] = decode_RID_CID(encodedFormula[i])
-            let [crid,ccid] = decode_RID_CID(currentCellAddr);
-            graph[rid][cid].push(currentCellAddr);
-            indeg[crid][ccid]++;
-        }
-    }
-}
 
 function evaluate(formula){
     let encodedFormula = formula.split(' ');
@@ -93,17 +68,21 @@ function addChildToParent(formula,currentCellAddr){
         if('A' <= encodedFormula[i][0] && encodedFormula[i][1] <= 'Z'){
             let [parentCell,parentCellProp] = getCellAndCellProps(encodedFormula[i])
             parentCellProp.children.push(currentCellAddr);
+            let [cell,cellProp] = getCellAndCellProps(currentCellAddr);
+            cellProp.indeg++;
         }
     }
 }
 //remove cell from previous parent's children array
-function removeCellFromPreviousParents(formula,currentCellAddr){
+function removeChildFromParents(formula,currentCellAddr){
     let encodedFormula = formula.split(' ');
     for(let i = 1;i < encodedFormula.length;i++){
         if('A' <= encodedFormula[i][0] && encodedFormula[i][1] <= 'Z'){
             let [parentCell,parentCellProp] = getCellAndCellProps(encodedFormula[i])
             let childIdx = parentCellProp.children.indexOf(currentCellAddr);
             parentCellProp.children.splice(childIdx,1);
+            let [cell,cellProp] = getCellAndCellProps(currentCellAddr);
+            cellProp.indeg--;
         }
     }
 }

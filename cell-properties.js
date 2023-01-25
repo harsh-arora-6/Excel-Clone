@@ -13,7 +13,8 @@ for(let i = 0;i < rows;i++){
             backgroundColor:"transparent",
             value:"",
             formula:"",
-            children:[]
+            children:[],
+            indeg:0
         }
         sheetRow.push(cellProp);
     }
