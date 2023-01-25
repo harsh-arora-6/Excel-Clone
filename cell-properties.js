@@ -10,7 +10,10 @@ for(let i = 0;i < rows;i++){
             fontSize:14,
             alignment:"left",
             fontColor:"#000000",
-            backgroundColor:"transparent"
+            backgroundColor:"transparent",
+            value:"",
+            formula:"",
+            children:[]
         }
         sheetRow.push(cellProp);
     }
@@ -31,14 +34,14 @@ const alignments = document.querySelectorAll('.alignment');
 const leftAlign = alignments[0];
 const centerAlign = alignments[1];
 const rightAlign = alignments[2];
-
+let formulaBar = document.querySelector('.formula-bar');
 
 const cells = document.querySelectorAll('.cell');
 
 // Text events
 bold.addEventListener('click',(e)=>{
     //array is passed as referrence;
-    let [cell,cellprop] = activeCell(addressBar);
+    let [cell,cellprop] = getCellAndCellProps(addressBar.value);
     
     //change in storage
     cellprop.bold = !cellprop.bold;
@@ -47,7 +50,7 @@ bold.addEventListener('click',(e)=>{
     bold.style.backgroundColor = cellprop.bold?activeColor:inactiveColor;//bold button
 })
 italic.addEventListener('click',(e)=>{
-    let [cell,cellprop] = activeCell(addressBar);
+    let [cell,cellprop] = getCellAndCellProps(addressBar.value);
     
     //change in storage
     cellprop.italic = !cellprop.italic;
@@ -56,7 +59,7 @@ italic.addEventListener('click',(e)=>{
     italic.style.backgroundColor = cellprop.italic?activeColor:inactiveColor;//italic button
 })
 underline.addEventListener('click',(e)=>{
-    let [cell,cellprop] = activeCell(addressBar);
+    let [cell,cellprop] = getCellAndCellProps(addressBar.value);
     
     //change in storage
     cellprop.underline = !cellprop.underline;
@@ -67,14 +70,14 @@ underline.addEventListener('click',(e)=>{
 
 //font events
 fontFamily.addEventListener('change',(e)=>{
-    let [cell,cellprop] = activeCell(addressBar);
+    let [cell,cellprop] = getCellAndCellProps(addressBar.value);
 
     let selectedFont = e.target.value;
     cellprop.fontFamily = selectedFont;
     cell.style.fontFamily = selectedFont;
 })
 fontSize.addEventListener('change',(e) => {
-    let [cell,cellprop] = activeCell(addressBar);
+    let [cell,cellprop] = getCellAndCellProps(addressBar.value);
 
     let selectedSize = e.target.value;
     cellprop.fontSize = selectedSize ;
@@ -83,14 +86,14 @@ fontSize.addEventListener('change',(e) => {
 
 //color events
 fontColor.addEventListener('change',(e) => {
-    let [cell,cellprop] = activeCell(addressBar);
+    let [cell,cellprop] = getCellAndCellProps(addressBar.value);
 
     let selectedColor = e.target.value;
     cellprop.fontColor = selectedColor;
     cell.style.color = selectedColor;
 })
 backgroundColor.addEventListener('change',(e) => {
-    let [cell,cellprop] = activeCell(addressBar);
+    let [cell,cellprop] = getCellAndCellProps(addressBar.value);
 
     let selectedColor = e.target.value;
     cellprop.backgroundColor = selectedColor;
@@ -100,7 +103,7 @@ backgroundColor.addEventListener('change',(e) => {
 //Alignment events
 alignments.forEach((alignment) => {
     alignment.addEventListener('click',(e) => {
-        let [cell,cellprop] = activeCell(addressBar);
+        let [cell,cellprop] = getCellAndCellProps(addressBar.value);
 
         let to_align = e.target.classList[1];
         switch(to_align){
@@ -144,7 +147,7 @@ cells.forEach((cell)=>{
 
 function attachEventListenerToAll(cell){
     cell.addEventListener('click',(e) => {
-        let [cell,cellprop] = activeCell(addressBar);
+        let [cell,cellprop] = getCellAndCellProps(addressBar.value);
         // change in ui(1);
         cell.style.fontWeight = cellprop.bold?"bold":"normal";//font change
         cell.style.fontStyle = cellprop.italic?"italic":"normal";//font change
@@ -160,6 +163,7 @@ function attachEventListenerToAll(cell){
         underline.style.backgroundColor = cellprop.underline?activeColor:inactiveColor;//underline button
         fontFamily.value = cellprop.fontFamily;
         fontSize.value = cellprop.fontSize;
+        formulaBar.value = cellprop.formula;
         switch(cellprop.alignment){
             case "left":
                 //change in ui
@@ -190,8 +194,8 @@ function attachEventListenerToAll(cell){
         }
     })
 }
-function activeCell(addrBar){
-    let [rid,cid] = decode_RID_CID(addrBar.value);
+function getCellAndCellProps(address){
+    let [rid,cid] = decode_RID_CID(address);
     let cell = document.querySelector(`.cell[rid="${rid}"][cid="${cid}"]`);
     let cellprop = sheetDB[rid][cid];
     return [cell,cellprop]

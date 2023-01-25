@@ -161,6 +161,7 @@ body {
     width: 5rem;
     border: 1px solid #dfe4ea;
     outline: none;
+    overflow: auto;
 }
 
 .sheet-actions-cont {
