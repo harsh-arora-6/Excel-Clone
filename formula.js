@@ -23,6 +23,22 @@ formulaBar.addEventListener('keydown',(e)=>{
     if(e.key === 'Enter' && inputFormula){
         let [cell,cellProp] = getCellAndCellProps(addressBar.value);
         if(inputFormula !== cellProp.formula){
+            //remove from previous graph
+            //If previous formula was there, then remove previous graph edges;
+            if(cellProp.formula !== "")removeFromGraph(cellProp.formula,addressBar.value);
+            // add child to graph
+            addToGraph(inputFormula,addressBar.value);
+
+            //check for cycle
+            let isCyclic = checkCycle();
+            // console.log('cell : ',cell);
+            // console.log(isCyclic);
+            if(isCyclic){
+                alert('Your Formula is Cyclic')
+                removeFromGraph(inputFormula,addressBar.value);
+                return;
+            }
+
             // remove from previous parents
             removeCellFromPreviousParents(cellProp.formula,addressBar.value);
             //evaluate new formula
@@ -36,6 +52,28 @@ formulaBar.addEventListener('keydown',(e)=>{
         
     }
 })
+function removeFromGraph(formula,currentCellAddr){
+    let encodedFormula = formula.split(' ');
+    for(let i = 1;i < encodedFormula.length;i++){
+        if('A' <= encodedFormula[i][0] && encodedFormula[i][1] <= 'Z'){
+            let [rid,cid] = decode_RID_CID(encodedFormula[i]);
+            let [crid,ccid] = decode_RID_CID(currentCellAddr);
+            graph[rid][cid].pop();
+            indeg[crid][ccid]--;
+        }
+    }
+}
+function addToGraph(formula,currentCellAddr){
+    let encodedFormula = formula.split(' ');
+    for(let i = 1;i < encodedFormula.length;i++){
+        if('A' <= encodedFormula[i][0] && encodedFormula[i][1] <= 'Z'){
+            let [rid,cid] = decode_RID_CID(encodedFormula[i])
+            let [crid,ccid] = decode_RID_CID(currentCellAddr);
+            graph[rid][cid].push(currentCellAddr);
+            indeg[crid][ccid]++;
+        }
+    }
+}
 
 function evaluate(formula){
     let encodedFormula = formula.split(' ');
