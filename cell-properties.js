@@ -1,27 +1,9 @@
-let sheetDB = [];
-for(let i = 0;i < rows;i++){
-    let sheetRow = [];
-    for(let j = 0;j < cols;j++){
-        let cellProp = {
-            bold:false,
-            italic:false,
-            underline:false,
-            fontFamily:"monospace",
-            fontSize:14,
-            alignment:"left",
-            fontColor:"#000000",
-            backgroundColor:"transparent",
-            value:"",
-            formula:"",
-            children:[],
-            indeg:0
-        }
-        sheetRow.push(cellProp);
-    }
-    sheetDB.push(sheetRow);
-}
 const activeColor = "#c8d6e5";
 const inactiveColor = "#f1f2f6";
+
+let collectedSheetDB = [];
+
+let sheetDB = [];
 
 // Application of two way binding (changing both storage and UI)
 const bold = document.querySelector('.bold');
@@ -157,6 +139,7 @@ function attachEventListenerToAll(cell){
         cell.style.fontSize = cellprop.fontSize + "px";
         cell.style.color = cellprop.color;
         cell.style.backgroundColor = cellprop.backgroundColor;
+       
 
         //change in ui container
         bold.style.backgroundColor = cellprop.bold?activeColor:inactiveColor;//bold button
@@ -164,7 +147,7 @@ function attachEventListenerToAll(cell){
         underline.style.backgroundColor = cellprop.underline?activeColor:inactiveColor;//underline button
         fontFamily.value = cellprop.fontFamily;
         fontSize.value = cellprop.fontSize;
-        formulaBar.value = cellprop.formula;
+
         switch(cellprop.alignment){
             case "left":
                 //change in ui
@@ -193,12 +176,17 @@ function attachEventListenerToAll(cell){
                 rightAlign.style.backgroundColor = activeColor;
                 break;
         }
+        formulaBar.value = cellprop.formula;
+        cell.innerText = cellprop.value;
     })
+    
+    
 }
 function getCellAndCellProps(address){
     let [rid,cid] = decode_RID_CID(address);
     let cell = document.querySelector(`.cell[rid="${rid}"][cid="${cid}"]`);
     let cellprop = sheetDB[rid][cid];
+    // console.log('getCellAndCellProps : ',cellprop);
     return [cell,cellprop]
 }
 

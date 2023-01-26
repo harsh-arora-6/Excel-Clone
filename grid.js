@@ -38,5 +38,3 @@ for(let i = 0;i < rows;i++){
     }
     cellsCont.appendChild(rowElem);
 }
-let firstCell = document.querySelector('.cell');
-firstCell.click();

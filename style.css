@@ -177,24 +177,41 @@ body {
     margin-left: 1rem;
 }
 
+.sheet-actions-cont>*:hover {
+    cursor: pointer;
+}
+
 .sheet-add-icon {
     width: 1.5rem;
 }
 
 .sheets-folder-cont {
     display: flex;
-    height: 80%;
+    height: 100%;
     /* 100% means full size left after padding */
     width: calc(100% - 1rem - 1.5rem - 1rem);
     text-decoration-line: 2px;
     padding-left: 0.2rem;
     padding-right: 0.2rem;
     align-items: center;
-    gap: 1rem;
+    gap: 2rem;
+    overflow-x: auto;
 }
 
 .sheet-folder {
+    display: flex;
+    height: 70%;
+    width: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sheet-content {
+    width: 5rem;
+    font-size: 1rem;
     text-decoration: underline;
     font-weight: bold;
     text-decoration-thickness: 2px;
+    text-align: center;
 }

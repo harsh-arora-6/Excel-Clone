@@ -11,6 +11,7 @@ for(let i = 0;i < rows;i++){
             // console.log(typeof(cellProp.value),typeof(enteredData)); first one is number , second is string 
             if(cellProp.value == enteredData)return;
             removeChildFromParents(cellProp.formula,currentCellAddr);
+            // console.log('blur event: ',enteredData,cell);
             storeValueAndFormula(enteredData,"",currentCellAddr);
             updateChildrenCells(currentCellAddr);
         })
