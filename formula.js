@@ -18,7 +18,7 @@ for(let i = 0;i < rows;i++){
 }
 
 
-formulaBar.addEventListener('keydown',(e)=>{
+formulaBar.addEventListener('keydown',async (e)=>{
     let inputFormula = formulaBar.value;
     if(e.key === 'Enter' && inputFormula){
         let [cell,cellProp] = getCellAndCellProps(addressBar.value);
@@ -30,11 +30,15 @@ formulaBar.addEventListener('keydown',(e)=>{
             addChildToParent(inputFormula,addressBar.value);
 
             //check for cycle
-            let isCyclic = checkCycle();
+            let cycle = checkCycle();
             // console.log('cell : ',cell);
             // console.log(isCyclic);
-            if(isCyclic){
-                alert('Your Formula is Cyclic')
+            if(cycle){
+                let response = confirm('Your Formula is Cyclic. Do you want to trace it ?');
+                while(response === true){
+                    await traceCycle(cycle[0],cycle[1]);
+                    response = confirm('Your Formula is Cyclic. Do you want to trace it ?');
+                }
                 removeChildFromParents(inputFormula,addressBar.value);
                 return;
             }

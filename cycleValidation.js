@@ -3,6 +3,7 @@ function checkCycle(){
     // let temp_indeg = [...indeg] or indeg; this will create deep copy we don't want that => that will disrupt 
     let temp_indeg = []
     let queue = [];
+    let startCell
     for(let i = 0 ;i < rows;i++){
         let temp_indeg_row = []
         for(let j = 0;j < cols;j++){
@@ -10,6 +11,8 @@ function checkCycle(){
             if(temp_indeg_row[j] === 0){
                 let cell = [i,j];
                 queue.push(cell);
+            }else{
+                startCell = [i,j];
             }
         }
         temp_indeg.push(temp_indeg_row);
@@ -27,9 +30,11 @@ function checkCycle(){
             // console.log("after :  ",'crid: ',crid,'ccid: ',ccid,'temp_indeg: ',temp_indeg[crid][ccid],'indeg: ',indeg[crid][ccid]);
             if(temp_indeg[crid][ccid] === 0){
                 queue.push([crid,ccid]);
+            }else{
+                startCell = [crid,ccid];
             }
         }
         cycle++;
     }
-    return (cycle !== rows*cols);
+    return (cycle !== rows*cols?startCell:null);
 }
