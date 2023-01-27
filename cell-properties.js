@@ -191,7 +191,8 @@ function getCellAndCellProps(address){
 }
 
 function decode_RID_CID(pos){
-    let rid = Number(pos[1]) - 1;
     let cid = pos.charCodeAt(0) - 65;
+    pos = pos.substring(1);
+    let rid = Number(pos) - 1;
     return [rid,cid];
 }
