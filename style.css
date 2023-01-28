@@ -13,17 +13,25 @@ body {
     display: flex;
     align-items: flex-end;
     padding-left: 1rem;
-    padding-bottom: 0.2rem;
     color: #f1f2f6;
+    align-items: flex-end;
 }
 
 .page-actions-cont>* {
+    width: 3rem;
     font-size: 1.1rem;
     margin-right: 2rem;
+    display: flex;
+    justify-content: center;
 }
 
 .page-actions-cont>*:hover {
     cursor: pointer;
+}
+
+.selected-page-action {
+    background-color: #f1f2f6;
+    color: #009432;
 }
 
 .cellprop-actions-cont {
@@ -196,6 +204,7 @@ body {
     align-items: center;
     gap: 2rem;
     overflow-x: auto;
+
 }
 
 .sheet-folder {

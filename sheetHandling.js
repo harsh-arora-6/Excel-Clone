@@ -16,6 +16,8 @@ sheetAddBtn.addEventListener('click',(e)=>{
     sheet.appendChild(sheetContent);
     sheetsFolderCont.appendChild(sheet);
 
+    // on overflowing ,automatically scrolls to this;
+    sheet.scrollIntoView();
     //create new sheetDB
     createSheetDB();    
     handleSheetActiveness(sheet);
