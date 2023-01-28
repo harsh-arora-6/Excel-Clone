@@ -210,17 +210,31 @@ body {
 .sheet-folder {
     display: flex;
     height: 70%;
-    width: 5rem;
-    display: flex;
+    width: 6rem;
     justify-content: center;
     align-items: center;
 }
 
 .sheet-content {
-    width: 5rem;
-    font-size: 1rem;
+    height: 100%;
+    width: 6rem;
+    font-size: 0.9rem;
     text-decoration: underline;
     font-weight: bold;
     text-decoration-thickness: 2px;
     text-align: center;
+    outline: none;
+    resize: none;
+    border: none;
+    background-color: #f1f2f6;
+    text-align: center;
+    padding-top: 0.5rem;
+}
+
+.sheet-content:hover {
+    cursor: pointer;
+}
+
+.active {
+    background-color: #c8d6e5;
 }

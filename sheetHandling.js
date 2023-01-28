@@ -1,7 +1,7 @@
 
 const sheetAddBtn = document.querySelector('.sheet-add-icon');
 const sheetsFolderCont = document.querySelector('.sheets-folder-cont');
-
+let sheetNumber = 1;
 sheetAddBtn.addEventListener('click',(e)=>{
     // create new sheet
     const sheet = document.createElement('div');
@@ -9,10 +9,13 @@ sheetAddBtn.addEventListener('click',(e)=>{
     //each time we click we want to know id for this sheet
     let allSheetsFolder = document.querySelectorAll('.sheet-folder');
     sheet.setAttribute('id',allSheetsFolder.length);
-    const sheetContent = document.createElement('div');
+    const sheetContent = document.createElement('textarea');
     sheetContent.setAttribute('class','sheet-content');
     sheetContent.setAttribute('id',allSheetsFolder.length)
-    sheetContent.innerText = `Sheet - ${allSheetsFolder.length + 1}`;
+    sheetContent.setAttribute('spellcheck',false);
+    sheetContent.setAttribute('readonly',true);
+    sheetContent.setAttribute('editedbyuser',false);
+    sheetContent.innerText = `Sheet-${sheetNumber++}`;
     sheet.appendChild(sheetContent);
     sheetsFolderCont.appendChild(sheet);
 
@@ -22,12 +25,36 @@ sheetAddBtn.addEventListener('click',(e)=>{
     createSheetDB();    
     handleSheetActiveness(sheet);
     handleSheetRemoval(sheet);
-
+    handleSheetRenaming(sheet);
     sheet.click();// after creating ,activate this sheet.
 })
 
 sheetAddBtn.click();//create first sheet
+// sheet name edited by user won't be affected by this function.
+function handleSheetRenaming(sheet){
+    let sheetContent = sheet.children[0];
+    // double click to rename a file
+    sheetContent.addEventListener('dblclick',(e)=>{
+        sheetContent.removeAttribute('readonly');
+        sheetContent.setAttribute('editedbyuser',true);// marking if name was edited by user.
+    })
+    
+    // after renaming make the sheet name readonly
+    sheetContent.addEventListener('blur',(e)=>{
+        sheetContent.setAttribute('readonly',true);
+        // if current sheet edited , then renaming of all sheets are done
+        let currentSheetNameEdited = sheetContent.getAttribute('editedbyuser');
+        if(currentSheetNameEdited === "false")return;
+        let allSheetsFolder = document.querySelectorAll('.sheet-folder');
+        sheetNumber = 1;
+        allSheetsFolder.forEach((sheetFolder,index) => {
+            let sheetContent = sheetFolder.querySelector('.sheet-content');
+            let edited = sheetContent.getAttribute('editedbyuser');
+            if(edited === "false")sheetContent.value = `Sheet-${sheetNumber++}`;
+        })
+    })
 
+}
 function createSheetDB(){
     let temp_sheetDB = [];
     for(let i = 0;i < rows;i++){
@@ -69,11 +96,14 @@ function handleSheetRemoval(sheet){
         collectedSheetDB.splice(id,1);
         //remove from ui
         sheet.remove();
-        // update the indexing;
+        // update the indexing and naming.
         allSheetsFolder = document.querySelectorAll('.sheet-folder');
+        sheetNumber = 1;
         allSheetsFolder.forEach((sheetFolder,index) => {
             sheetFolder.setAttribute('id',index);
-            sheetFolder.querySelector('.sheet-content').innerText = `Sheet - ${index + 1}`;
+            let sheetContent = sheetFolder.querySelector('.sheet-content');
+            let edited = sheetContent.getAttribute('editedbyuser');
+            if(edited === "false")sheetContent.value = `Sheet-${sheetNumber++}`;
         })
         allSheetsFolder[0].click();
     })
@@ -96,9 +126,9 @@ function handleSheetUI(sheet){
     // change sheet selection UI
     let allSheetsFolder = document.querySelectorAll('.sheet-folder');
     allSheetsFolder.forEach((sheetFolder)=>{
-        sheetFolder.style.backgroundColor = inactiveColor;
+        sheetFolder.children[0].classList.remove('active');
     })
-    sheet.style.backgroundColor = activeColor;
+    sheet.children[0].classList.add('active')
 }
 function handleSheetActiveness(sheet){
     sheet.addEventListener('click',(e)=>{

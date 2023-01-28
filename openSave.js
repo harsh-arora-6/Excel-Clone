@@ -6,7 +6,8 @@ downloadBtn.addEventListener('click',(e)=>{
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(sheetDB));
     var downloadAnchorNode = document.createElement('a');
     downloadAnchorNode.setAttribute("href",     dataStr);
-    downloadAnchorNode.setAttribute("download", 'sheetData' + ".json");
+    let sheetContent = document.querySelector('.sheet-content.active');
+    downloadAnchorNode.setAttribute("download", `${sheetContent.value}` + ".json");
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
 });
